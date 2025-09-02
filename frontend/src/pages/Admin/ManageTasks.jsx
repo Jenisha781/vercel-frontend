@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "/src/utils/axiosInstance.js";
+import axiosInstance from "../../utils/axiosInstance"; // ✅ changed from /src/ to relative
 import { API_PATHS } from "../../utils/apiPaths";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import TaskStatusTabs from "../../components/TaskStatusTabs";
@@ -12,7 +12,6 @@ const ManageTasks = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [tabs, setTabs] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
-  console.log("allTasks", allTasks);
 
   const navigate = useNavigate();
 
@@ -45,14 +44,12 @@ const ManageTasks = () => {
     navigate(`/admin/create-task`, { state: { taskId: taskData.id } });
   };
 
-  // download task report
   const handleDownloadReport = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.REPORTS.EXPORT_TASKS, {
         responseType: "blob",
       });
 
-      // Create a URL for the blob
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -114,7 +111,7 @@ const ManageTasks = () => {
               progress={item.progress}
               createdAt={item.createdAt}
               dueDate={item.dueDate}
-              assignedTo={item.assignedTo?.map((item) => item.profileImageUrl)}
+              assignedTo={item.assignedTo?.map((i) => i.profileImageUrl)}
               attachmentCount={item.attachments?.length || 0}
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
